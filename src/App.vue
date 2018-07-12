@@ -1,5 +1,5 @@
 <template>
-<el-container>
+<el-container id="boxMain">
      <el-header class="bg-purple-dark">
        <v-header213></v-header213>
        </el-header>
@@ -13,25 +13,30 @@
 </template>
 
 <style lang="scss">
+#boxMain{
+  width: 1180px;
+  margin: auto;
+  height: 100%;
+}
 .bg-purple-dark {
   background: #409eff;
   padding: 0px;
 }
 .el-header {
-  height:150px!important
+  height:100px!important
 }
 .el-aside {
   background-color: #d3dce6;
   color: #333;
-  height:496px;
-  width:180px;
+  height:780px;
+  width:180px!important;
 }
 
 .el-main {
   background-color: #e9eef3;
   color: #333;
   padding: 0px;
-  height:496px;
+  height:780px;
 }
 </style>
 
