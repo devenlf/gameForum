@@ -1,53 +1,46 @@
 <template>
-<el-container id="boxMain">
-     <el-header class="bg-purple-dark">
-       <v-header213></v-header213>
-       </el-header>
-  <el-container>
-    <el-aside>Aside</el-aside>
-    <el-main>
-       <router-view></router-view>
-    </el-main>
-  </el-container>
-</el-container>
+<el-row class="container mianBox" style="height:100%">
+   <v-side></v-side>
+   <el-col class="main" :span="20">
+      <v-header :user="person"></v-header>
+      <el-row>
+        <router-view></router-view>
+      </el-row>
+   </el-col>
+</el-row>
 </template>
 
 <style lang="scss">
-#boxMain{
-  width: 1180px;
-  margin: auto;
-  height: 100%;
+html,
+body {
+  height: 99.2%;
 }
-.bg-purple-dark {
-  background: #409eff;
-  padding: 0px;
+.mianBox {
+  height: 100%!important;
 }
-.el-header {
-  height:100px!important
-}
-.el-aside {
-  background-color: #d3dce6;
-  color: #333;
-  height:780px;
-  width:180px!important;
-}
-
-.el-main {
-  background-color: #e9eef3;
-  color: #333;
-  padding: 0px;
-  height:780px;
+.main {
+  height: 100%!important;
 }
 </style>
 
 <script>
 import Header222 from "./common/header";
+import side from "./common/sidebar";
 export default {
   data() {
-    return {};
+    return {
+      person :{}
+    };
+  },
+  created:function(){
+    this.$http.get("http://yapi.demo.qunar.com/mock/14002/userinfo")
+    .then((data)=>{
+      this.person = data.data;
+    })
   },
   components: {
-    "v-header213": Header222
+    "v-header": Header222,
+    "v-side": side
   }
 };
 </script>

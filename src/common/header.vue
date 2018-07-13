@@ -1,13 +1,30 @@
 <template>
-<div>{{msg}}</div>
+<el-row class="titleHeader">
+    <el-col class="userName" :span="4" :offset="20">
+      <p>
+         欢迎登录   {{user.name}}
+      </p>
+    </el-col>
+</el-row>
 </template>
+<style lang="scss">
+.titleHeader {
+  display: block;
+  width: 100%;
+  background: #eee;
+  p{
+    line-height: 100%
+  }
+}
+</style>
 
 <script>
 export default {
-  data () {
-    return {
-      msg: 'dada dsada'
-    }
+  props: {
+    user: {}
+  },
+  data() {
+    return {};
   }
 };
 </script>
