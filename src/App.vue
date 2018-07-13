@@ -1,7 +1,7 @@
 <template>
 <el-row class="container mianBox" style="height:100%">
    <v-side></v-side>
-   <el-col class="main" :span="20">
+   <el-col class="main" :span="22">
       <v-header :user="person"></v-header>
       <el-row>
         <router-view></router-view>

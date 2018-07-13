@@ -1,9 +1,9 @@
 <template>
-<el-col class="sidebar" :span="4">
-    <el-row class="logoImg" :span="4">
+<el-col class="sidebar" :span="2">
+    <el-row class="logoImg" :span="2">
         <img  src="./images/gamelogo.png"/>
     </el-row>
-    <el-row class="listmuen" :span="4">
+    <el-row class="listmuen" :span="2">
         <el-menu router text-color="#ccc" >
             <template v-for="(item,index) in $router.options.routes">
             <el-menu-item :index="item.path" :key="index">
@@ -25,9 +25,11 @@
 }
 .logoImg {
   width: 100%;
+  height: 100px;
   img {
     display: block;
     width: 100%;
+    height: 100%;
   }
 }
 </style>
