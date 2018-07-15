@@ -3,7 +3,7 @@
    <v-side></v-side>
    <el-col class="main" :span="22">
       <v-header :user="person"></v-header>
-      <el-row>
+      <el-row id="mianStyle">
         <router-view></router-view>
       </el-row>
    </el-col>
@@ -17,6 +17,11 @@ body {
 }
 .mianBox {
   height: 100%!important;
+}
+#mianStyle{
+  position: absolute;
+  top: 100px;
+  left: 160px;
 }
 .main {
   height: 100%!important;
