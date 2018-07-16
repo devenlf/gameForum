@@ -5,7 +5,7 @@
     </el-row>
     <el-row class="listmuen">
         <el-menu router text-color="#ccc" >
-            <template v-for="(item,index) in $router.options.routes">
+            <template v-for="(item,index) in $router.options.routes[0].children">
             <el-menu-item :index="item.path" :key="index">
                 <i :class="item.className"></i>
                 <span>{{item.name}}</span>
@@ -44,6 +44,7 @@ export default {
     };
   },
   created:function(){
+    
   },
   methods: {
     handleOpen(key, keyPath) {

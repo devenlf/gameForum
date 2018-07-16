@@ -1,5 +1,13 @@
 <template>
-   <router-view></router-view>
+<el-row class="container mianBox" style="height:100%">
+   <v-side></v-side>
+   <el-col class="main" :span="22">
+      <v-header :user="person"></v-header>
+      <el-row id="mianStyle">
+        <router-view></router-view>
+      </el-row>
+   </el-col>
+</el-row>
 </template>
 
 <style lang="scss">
@@ -21,8 +29,8 @@ body {
 </style>
 
 <script>
-import Header222 from "./common/header";
-import side from "./common/sidebar";
+import Header222 from "../common/header";
+import side from "../common/sidebar";
 export default {
   data() {
     return {

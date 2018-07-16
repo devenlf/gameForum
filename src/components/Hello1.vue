@@ -9,6 +9,9 @@ export default {
     return {
       msg: 'dadahello 1'
     }
+  },
+  created:function(){
+
   }
 }
 </script>
