@@ -47,16 +47,22 @@ export default {
   data() {
     return {
       name: "小红",
-      timeData: "new Date()"
+      timeData: "newsdsd"
     };
   },
-  
-  mounted:function() {
-    console.log(131)
-    // setInterval(function() {
-    //   this.timeData = new Date();
-    //   console.log(213);
-    // }, 1000);
+
+  mounted: function() {
+    this.updataTime();
+  },
+
+  methods: {
+    updataTime: function() {
+      var _this = this;
+      setInterval(function() {
+        var newTime = new Date();
+        _this.$set(_this.$data, "timeData", newTime);
+      }, 1000);
+    }
   },
   components: {
     "v-header": Header
