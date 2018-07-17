@@ -1,9 +1,8 @@
 import Vue from 'vue';
 import VueRouter from "vue-router";
-import login from '../views/login';
-import home from '../views/home';
-import Hello1 from '../components/hello1';
-import HelloWorld from '../components/HelloWorld';
+import login from '../views/login/login';
+import home from '../views/home/home';
+import HelloWorld from '../views/HelloWorld';
 
 Vue.use(VueRouter);
 const router = new VueRouter({
@@ -11,13 +10,13 @@ const router = new VueRouter({
         {
             path: '/',
             //重定向
-            redirect: '/hello1',
+            redirect: '/home',
             component: home,
             name:home,
             children: [
                 {
-                    path: 'hello1',
-                    component: Hello1,
+                    path: 'home',
+                    component: home,
                     className: "el-icon-document",
                     name: "lihao"
                 },
