@@ -2,8 +2,8 @@
 <div class="exam-paper">
     <div class="page-paper" style="">
         <div class="paper-header"><h4>《上海护理》2018年第三期护理研究设计</h4></div>
-        <div class="paper-line"></div>
-        <div class="paper-body">
+        <div class="paper-line">
+             <div class="paper-body">
               <div class="problem">
                   <h4>1.   你好拿到哪里的六点就爱上了多年啦</h4>
                     <ul>
@@ -19,21 +19,7 @@
                     <el-radio :label="3">备选项</el-radio>
                 </el-radio-group>
               </div>
- <div class="problem">
-                  <h4>1.   你好拿到哪里的六点就爱上了多年啦</h4>
-                    <ul>
-                        <li>A</li>
-                        <li>B</li>
-                        <li>C</li>
-                        <li>D</li>
-                    </ul>
-                    <el-radio-group v-model="radio1">
-                    <el-radio :label="0">备选项</el-radio>
-                    <el-radio :label="1">备选项</el-radio>
-                    <el-radio :label="2">备选项</el-radio>
-                    <el-radio :label="3">备选项</el-radio>
-                </el-radio-group>
-              </div>
+        </div>
         </div>
         <div class="paper-footer">
             adsadad
@@ -84,6 +70,7 @@
   border-left: 1px solid rgba($color: #999, $alpha: 0.3);
   top: 2px;
   position: fixed;
+  overflow: hidden;
 }
 .paper-body {
   width: 102%;
@@ -139,7 +126,7 @@ export default {
   data() {
     return {
       radio2: 1,
-      radio1:''
+      radio1: ""
     };
   }
 };
