@@ -2,6 +2,9 @@ import Vue from 'vue';
 import VueRouter from "vue-router";
 import login from '../views/login/login';
 import home from '../views/home/home';
+import project from '../views/project-list/project-list';
+import examination from '../views/examination/examination';
+
 
 Vue.use(VueRouter);
 const router = new VueRouter({
@@ -9,14 +12,13 @@ const router = new VueRouter({
         {
             path: '/',
             //重定向
-            redirect: '/home',
+            redirect: '/project',
             component: home,
             name:home,
             children: [
                 {
-                    path: 'home',
-                    component: home,
-                    className: "el-icon-document",
+                    path: 'project',
+                    component: project,
                     name: "lihao"
                 }
             ]
@@ -24,6 +26,10 @@ const router = new VueRouter({
         {
             path: '/login',
             component: login,
+        },
+        {
+            path: '/examination',
+            component: examination,
         }
     ]
 });
