@@ -5,7 +5,7 @@
         <div class="paper-line"></div>
         <div class="paper-body">
               <div class="problem">
-                  <h4>1.你好拿到哪里的六点就爱上了多年啦</h4>
+                  <h4>1.   你好拿到哪里的六点就爱上了多年啦</h4>
                     <ul>
                         <li>A</li>
                         <li>B</li>
@@ -19,7 +19,21 @@
                     <el-radio :label="3">备选项</el-radio>
                 </el-radio-group>
               </div>
-
+ <div class="problem">
+                  <h4>1.   你好拿到哪里的六点就爱上了多年啦</h4>
+                    <ul>
+                        <li>A</li>
+                        <li>B</li>
+                        <li>C</li>
+                        <li>D</li>
+                    </ul>
+                    <el-radio-group v-model="radio1">
+                    <el-radio :label="0">备选项</el-radio>
+                    <el-radio :label="1">备选项</el-radio>
+                    <el-radio :label="2">备选项</el-radio>
+                    <el-radio :label="3">备选项</el-radio>
+                </el-radio-group>
+              </div>
         </div>
         <div class="paper-footer">
             adsadad
@@ -100,19 +114,23 @@
   line-height: 16px;
   margin-top: 2px;
 }
-.el-radio-group{
-    margin-left: 20px;
-    .el-radio__label{
-        font-size: 16px;
-        padding-left: 20px;
-    }
+.el-radio-group {
+  margin-left: 20px;
+  .el-radio__label {
+    font-size: 16px;
+    padding-left: 20px;
+  }
 }
-.problem{
-    ul{
-        list-style: none;
-        float: left;
-        font-size: 16px;
-    }
+.problem {
+  h4 {
+    font-size: 15px;
+    font-weight: bold;
+  }
+  ul {
+    list-style: none;
+    float: left;
+    font-size: 14px;
+  }
 }
 </style>
 
@@ -120,7 +138,8 @@
 export default {
   data() {
     return {
-      radio2: 1
+      radio2: 1,
+      radio1:''
     };
   }
 };
