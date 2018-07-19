@@ -30,10 +30,7 @@ export default {
     };
   },
   created:function(){
-    this.$http.get("http://yapi.demo.qunar.com/mock/14002/userinfo")
-    .then((data)=>{
-      this.person = data.data;
-    })
+    console.log(this.$store.state.show)
   },
   components: {
     "v-header": Header222,

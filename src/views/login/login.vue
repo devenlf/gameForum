@@ -61,6 +61,8 @@
 @import "./login.scss";
 .modal-dialog {
   width: 50%;
+  max-width: 960px;
+  min-width: 900px;
 }
 .modal-body {
   text-align: center;
