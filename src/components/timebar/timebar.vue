@@ -25,7 +25,7 @@ export default {
   data() {
     return {
       name: "小红",
-      timeData: "newsdsd"
+      timeData: this.timeFormat()
     };
   },
   mounted: function() {

@@ -182,7 +182,7 @@ export default {
 }
 .buttom-group {
   padding-bottom: 3px;
-  padding-left: 398px;
+  padding-left: 386px;
 }
 .num-btn {
   background: #b62f60;

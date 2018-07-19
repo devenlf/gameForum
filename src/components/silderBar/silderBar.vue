@@ -5,7 +5,7 @@
            <div class="list-muen">
                <ul class="slider-bars">
                    <li>
-                       <i class="fa fa-bar-chart"></i>个人资料
+                       <i class="fa fa-bar-chart"></i>学分考试
                    </li>
                </ul>
            </div>
