@@ -19,16 +19,25 @@
                     <el-radio :label="3">备选项</el-radio>
                 </el-radio-group>
               </div>
+              <v-cueexam v-if="false"></v-cueexam>
+              <v-cueunanswer v-if="false"></v-cueunanswer>
+              <v-suresubmit></v-suresubmit>
         </div>
         </div>
         <div class="paper-footer">
-            adsadad
+            <button type="button" class="btn submit-paper">提交答案</button>
         </div>
     </div>
 </div>
 </template>
-
 <style lang="scss">
+.submit-paper {
+  margin: 10px auto;
+  background: #607d8b;
+}
+.btn {
+  padding: 9px 26px;
+}
 .exam-paper {
   height: 100%;
 }
@@ -91,6 +100,7 @@
   height: 80px;
   position: fixed;
   background: #9b2c54;
+  text-align: center;
 }
 .el-radio + .el-radio {
   margin-left: 0px;
@@ -122,12 +132,20 @@
 </style>
 
 <script>
+import cueexam from "@/components/cueexam/cueexam";
+import cueunanswer from "@/components/cueunanswer/cueunanswer";
+import suresubmit from "@/components/suresubmit/suresubmit";
 export default {
   data() {
     return {
       radio2: 1,
       radio1: ""
     };
+  },
+  components: {
+    "v-cueexam": cueexam,
+    "v-cueunanswer":cueunanswer,
+    "v-suresubmit":suresubmit
   }
 };
 </script>

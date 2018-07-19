@@ -8,12 +8,10 @@
         <table class="allData" border="0">
         <thead>
         <tr class="project-title">
-        <th width="140px" >对应期刊</th>
-        <th width="140px" >考试周期</th>
-        <th width="80px">已答</th>
-        <th width="80px">未答</th>
-        <th width="140px">考试指南</th>
-        <th width="80px">操作</th>
+        <th width="190px" >对应期刊</th>
+        <th width="190px" >考试周期</th>
+        <th width="190px">考试指南</th>
+        <th width="90px">操作</th>
         </tr>
         </thead>
         <tbody>
@@ -21,8 +19,6 @@
         <tr :key="data.id">
         <td>{{data.bookname}}</td>
         <td>{{data.examtime}}</td>
-        <td>{{data.finished}}</td>
-        <td>{{data.unfinish}}</td>
         <td class="guide">{{data.examGuide}}</td>
         <td class="testing" data-toggle="modal" data-target="#myModal" @click="showExamInfo(index)">{{data.text}}</td>
         </tr>

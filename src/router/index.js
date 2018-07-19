@@ -3,6 +3,7 @@ import VueRouter from "vue-router";
 import login from '../views/login/login';
 import home from '../views/home/home';
 import project from '../views/project-list/project-list';
+import grade from '../views/grade/grade';
 import examination from '../views/examination/examination';
 
 
@@ -20,6 +21,11 @@ const router = new VueRouter({
                     path: 'project',
                     component: project,
                     name: "lihao"
+                },
+                {
+                    path: 'grade',
+                    component: grade,
+                    name: "grade"
                 }
             ]
         },
