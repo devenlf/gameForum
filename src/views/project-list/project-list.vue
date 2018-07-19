@@ -19,14 +19,17 @@
         <tr :key="data.id">
         <td>{{data.bookname}}</td>
         <td>{{data.examtime}}</td>
-        <td class="guide">{{data.examGuide}}</td>
+        <td class="guide" data-toggle="modal" data-target="#myModal2"  @click="showPsd">{{data.examGuide}}</td>
         <td class="testing" data-toggle="modal" data-target="#myModal" @click="showExamInfo(index)">{{data.text}}</td>
         </tr>
         </template>
         </tbody>
         </table>
         <div class="buttom-group">
-
+            <button type="button" class="btn num-btn">5</button>
+            <button type="button" class="btn num-btn">10</button>
+            <button type="button" class="btn num-btn">15</button>
+            <button type="button" class="btn num-btn">20</button>
         </div>
         </div>
     </div>
@@ -57,14 +60,28 @@
           </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn begin-exam">开始考试</button>
+        <button type="button" @click="goToExam" class="btn begin-exam">开始考试</button>
       </div>
     </div>
   </div>
 </div>
+
+     <!-- pdf预览模态框 -->
+<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog show-test" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close-2" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      </div>
+      <div class="modal-body" ref="wheel" id="psd-content"></div>
+    </div>
+  </div>
+</div>
+
 </div>
 </template>
 <script>
+var PDF = require("@/assets/js/pdfobject.js");
 export default {
   data() {
     return {
@@ -136,9 +153,19 @@ export default {
       ]
     };
   },
+  created: function() {},
   methods: {
     showExamInfo: function(index) {
       console.log(index);
+    },
+    showPsd() {
+      PDF.PDFObject.embed(
+        "/static/pdf/12313.pdf",
+        "#psd-content"
+      );
+    },
+    goToExam() {
+      this.$router.push({ path: "examination" });
     }
   }
 };
@@ -152,6 +179,17 @@ export default {
   dl::after {
     clear: both;
   }
+}
+.buttom-group {
+  padding-bottom: 3px;
+  padding-left: 398px;
+}
+.num-btn {
+  background: #b62f60;
+  border-radius: 0px;
+  padding: 8px 24px;
+  margin: -2.3px;
+  border: 1px solid #fff;
 }
 .list-body {
   width: 90%;
@@ -197,6 +235,11 @@ export default {
     text-align: center;
   }
 }
+.close-2 {
+  margin-left: 98%;
+  background: #b62f60;
+  border: 1px solid rgba($color: #b62f60, $alpha: 1);
+}
 .project {
   width: 92%;
   margin: auto;
@@ -204,8 +247,8 @@ export default {
   border-radius: 6px;
   position: relative;
 }
-.begin-exam{
-  background:#b62f60;
+.begin-exam {
+  background: #b62f60;
   padding: 10px 25px;
 }
 .box-header {
@@ -227,15 +270,15 @@ export default {
   padding-bottom: 30px;
 }
 .exam-info {
-    margin-top: 20px;
-    font-size: 15px;
+  margin-top: 20px;
+  font-size: 15px;
   div {
     line-height: 40px;
   }
-  span{
-      margin-left: 14px;
-      margin-right: 14px;
-      font-weight: bold;
+  span {
+    margin-left: 14px;
+    margin-right: 14px;
+    font-weight: bold;
   }
 }
 .user-title {
@@ -246,6 +289,11 @@ export default {
   text-indent: 20px;
   span {
     font-size: 20px;
+  }
+}
+#myModal2 {
+  .modal-body {
+    height: 700px;
   }
 }
 </style>

@@ -23,7 +23,7 @@
       <div class="read-book">
         <img src="@/assets/image/small_03.png">
         <div class="text-content">
-                  <span data-toggle="modal" data-target="#myModal">[在线阅读]</span>
+                  <span data-toggle="modal" data-target="#myModal" @click="openBook">[在线阅读]</span>
                   <span>[下载]</span>
         </div>
       </div>
@@ -43,14 +43,14 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+        <h4 class="modal-title" id="myModalLabel">上海护理继续教育园地网站使用操作指南</h4>
       </div>
       <div class="modal-body">
-        <img src="@/assets/image/1.png"/>
+        <img :src="guideBook[currentPage].img"/>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary">上一页</button>
-        <button type="button" class="btn btn-primary">下一页</button>
+        <button type="button" class="btn btn-primary" @click="prevPage">上一页</button>
+        <button type="button" class="btn btn-primary" @click="nextPage">下一页</button>
       </div>
     </div>
   </div>
@@ -59,11 +59,11 @@
 </template>
 <style lang="scss" scoped>
 @import "./login.scss";
-.modal-dialog{
-  width: 50%
+.modal-dialog {
+  width: 50%;
 }
-.modal-body{
-  text-align: center
+.modal-body {
+  text-align: center;
 }
 </style>
 
@@ -74,11 +74,38 @@ import header from "@/components/header/header";
 export default {
   data() {
     return {
-      person: {}
+      person: {},
+      currentPage: 0,
+      guideBook: [
+        { img: "/static/img/1.png" },
+        { img: "/static/img/2.png" },
+        { img: "/static/img/3.png" },
+        { img: "/static/img/4.png" },
+        { img: "/static/img/5.png" },
+        { img: "/static/img/6.png" },
+        { img: "/static/img/7.png" }
+      ]
     };
   },
   created: function() {
     setCookie("userInfo", { name: "小明" });
+  },
+  methods: {
+    openBook: function() {
+      this.currentPage = 0;
+    },
+    nextPage() {
+      if (this.currentPage < this.guideBook.length-1) {
+        this.currentPage++;
+        this.$set(this.$data, "currentPage", this.currentPage);
+      }
+    },
+    prevPage() {
+      if (this.currentPage > 0) {
+        this.currentPage--;
+        this.$set(this.$data, "currentPage", this.currentPage);
+      }
+    }
   },
   components: {
     "v-header": header
