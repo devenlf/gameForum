@@ -1,15 +1,15 @@
 import Cookies from 'js-cookie'
 
-// const CookieKey = 'SSOLoginCookieName_31huiyi'
+const CookieKey = 'xauthToken'
 
-export function getCookie(CookieKey) {
+export function getCookie() {
   return Cookies.get(CookieKey)
 }
 
-export function setCookie(CookieKey,cookie) {
-  return Cookies.set(CookieKey, cookie)
+export function setCookie(cookie) {
+  return Cookies.set(CookieKey,cookie)
 }
 
-export function removeCookie(CookieKey) {
+export function removeCookie() {
   return Cookies.remove(CookieKey)
 }

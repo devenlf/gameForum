@@ -1,16 +1,17 @@
 import router from '../router';
-import {getCookie} from '../utils/cookieFunction'
-const isLogin = (getCookie('userInfo')!==undefined);
+import { getCookie } from '../utils/cookieFunction'
+import store from '@/store'
 
 router.beforeEach((to, from, next) => {
-    if(isLogin){ //如果有就直接到首页咯
+    const isLogin = (getCookie('xauthToken') && getCookie('xauthToken') !== 'undefined');
+    if (to.path === '/login') { //如果是登录页面路径，就直接next()
         next();
     } else {
-        if(to.path==='/login'){ //如果是登录页面路径，就直接next()
+        if (isLogin) { //如果有就直接到首页
             next();
-        } else { //不然就跳转到登录；
+        } else {
+            //不然就跳转到登录；
             next('/login');
         }
-
     }
 })

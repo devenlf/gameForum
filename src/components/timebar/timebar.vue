@@ -3,7 +3,7 @@
    <div class="user-info">
          <span class="time1">傍晚好,</span>
          <span class="name">{{name}}</span>
-         <a class="sign-out">[退出]</a>
+         <a class="sign-out" @click="signOut">[退出]</a>
          <span class="time2">
            {{timeData}}
          </span>
@@ -12,6 +12,8 @@
 </template>
 
 <script>
+import { getCookie, setCookie, removeCookie } from '../../utils/cookieFunction';
+import $ from 'jquery'
 const weekday = [
   "星期天",
   "星期一",
@@ -24,12 +26,15 @@ const weekday = [
 export default {
   data() {
     return {
-      name: "小红",
+      name: '',
       timeData: this.timeFormat()
     };
   },
   mounted: function() {
     this.updataTime();
+  },
+  created: function() {
+    this.name = $.parseJSON( getCookie() ).data.name;
   },
 
   methods: {
@@ -60,6 +65,10 @@ export default {
         ":" +
         time.getSeconds();
       return newTime;
+    },
+    signOut() {
+      removeCookie();
+      this.$router.push({ path: "/login" });
     }
   }
 };

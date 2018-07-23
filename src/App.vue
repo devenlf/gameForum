@@ -26,12 +26,11 @@ import side from "./common/sidebar";
 export default {
   data() {
     return {
-      person :{}
     };
   },
   created:function(){
-    console.log(this.$store.state.show)
-  },
+
+},
   components: {
     "v-header": Header222,
     "v-side": side
