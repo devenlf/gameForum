@@ -1,9 +1,9 @@
 import request from '@/utils/request'
 //相关接口调用
-export function login(account,password) {
+export function login(userInfo) {
     const data = {
-      account: account,
-      password: password
+      account: userInfo.account,
+      password: userInfo.password
     }
     return request({
       url: 'nurseLearning-mobile/login2',

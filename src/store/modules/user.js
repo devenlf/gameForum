@@ -20,18 +20,24 @@ const user = {
             const account = userInfo.account.trim()
             return new Promise((resolve, reject) => {
                 login(account, userInfo.password).then(response => {
-                    let userInfo = {};
-                    userInfo.token=response.data.data.xauthToken;
-                    userInfo.data={};
-                    userInfo.data.name=response.data.data.user.realName;
-                    commit('SET_COOKIE', userInfo.token)
-                    commit('SET_REALNAME', userInfo.data.name)
-                    setCookie(userInfo)
+                    if (response.data.success) {
+                        let userInfo = {};
+                        userInfo.token = response.data.data.xauthToken;
+                        userInfo.data = {};
+                        userInfo.data.name = response.data.data.user.realName;
+                        commit('SET_COOKIE', userInfo.token)
+                        commit('SET_REALNAME', userInfo.data.name)
+                        setCookie(userInfo)
+                    }
                     resolve(response)
                 }).catch(error => {
                     reject(error)
                 })
             })
+        },
+        LogOut({ commit }) {
+            commit('SET_COOKIE', '');
+            removeCookie();
         }
     }
 }

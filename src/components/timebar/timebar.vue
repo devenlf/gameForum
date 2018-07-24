@@ -13,6 +13,7 @@
 
 <script>
 import { getCookie, setCookie, removeCookie } from '../../utils/cookieFunction';
+import store from '@/store'
 import $ from 'jquery'
 const weekday = [
   "星期天",
@@ -67,7 +68,7 @@ export default {
       return newTime;
     },
     signOut() {
-      removeCookie();
+      store.dispatch("LogOut")
       this.$router.push({ path: "/login" });
     }
   }
