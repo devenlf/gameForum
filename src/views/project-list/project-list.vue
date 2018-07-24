@@ -15,7 +15,7 @@
         </tr>
         </thead>
         <tbody>
-        <template v-for="(data,index) in examData">
+        <template v-for="(data) in examData">
         <tr :key="data.id">
         <td>{{data.bookname}}</td>
         <td>{{data.examtime}}</td>
@@ -83,6 +83,7 @@
 <script>
 var PDF = require("@/assets/js/pdfobject.js");
 import { examInfo } from "@/api/exam";
+import { examList } from "@/api/exam";
 import { getCookie } from "../../utils/cookieFunction";
 
 export default {
@@ -106,66 +107,29 @@ export default {
           examGuide: "在线阅读",
           text: "测试",
           examId: 2
-        },
-        {
-          bookname: "钢铁是怎么样连城的",
-          examtime: "一周",
-          finished: 20,
-          unfinish: 0,
-          examGuide: "在线阅读",
-          text: "测试",
-          examId: 2
-        },
-        {
-          bookname: "钢铁是怎么样连城的",
-          examtime: "一周",
-          finished: 20,
-          unfinish: 0,
-          examGuide: "在线阅读",
-          text: "测试",
-          examId: 2
-        },
-        {
-          bookname: "钢铁是怎么样连城的",
-          examtime: "一周",
-          finished: 20,
-          unfinish: 0,
-          examGuide: "在线阅读",
-          text: "测试",
-          examId: 2
-        },
-        {
-          bookname: "钢铁是怎么样连城的",
-          examtime: "一周",
-          finished: 20,
-          unfinish: 0,
-          examGuide: "在线阅读",
-          text: "测试",
-          examId: 2
-        },
-        {
-          bookname: "钢铁是怎么样连城的",
-          examtime: "一周",
-          finished: 20,
-          unfinish: 0,
-          examGuide: "在线阅读",
-          text: "测试",
-          examId: 2
-        },
-        {
-          bookname: "钢铁是怎么样连城的",
-          examtime: "一周",
-          finished: 20,
-          unfinish: 0,
-          examGuide: "在线阅读",
-          text: "测试",
-          examId: 2
         }
       ]
     };
   },
-  created: function() {},
+  created: function() {
+    this.showListExam()
+  },
   methods: {
+    showListExam: function(params) {
+      this.getListData();
+    },
+    getListData: function() {
+      return new Promise((resolve, reject) => {
+        examList(getCookie())
+          .then(response => {
+            console.log(response)
+            resolve(response);
+          })
+          .catch(error => {
+            reject(error);
+          });
+      });
+    },
     showExamInfo: function(index) {
       this.getExamInfo(index).then(response => {
         let beginTime = new Date(response.data.data.beginOpenTime);
@@ -207,7 +171,7 @@ export default {
       PDF.PDFObject.embed("/static/pdf/12313.pdf", "#psd-content");
     },
     goToExam() {
-      this.$router.push({ path: "examination" ,query:{num:333}});
+      this.$router.push({ path: "examination", query: { num: 333 } });
     }
   }
 };

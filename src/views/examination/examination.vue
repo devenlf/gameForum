@@ -25,6 +25,7 @@ import cueexam from "@/components/cueexam/cueexam";
 import cueunanswer from "@/components/cueunanswer/cueunanswer";
 import suresubmit from "@/components/suresubmit/suresubmit";
 import { createExamPaper } from "@/api/exam";
+import { submitExamPaper } from "@/api/exam";
 import { getCookie } from "@/utils/cookieFunction";
 import radio from "@/components/radio/radio";
 import checkList from "@/components/checkList/checkList";
@@ -32,6 +33,7 @@ import checkList from "@/components/checkList/checkList";
 export default {
   data() {
     return {
+      resAllData:{},
       examPaper: []
     };
   },
@@ -43,7 +45,8 @@ export default {
       return new Promise((resolve, reject) => {
         createExamPaper(index, getCookie())
           .then(response => {
-            this.examPaper = response.data.examQuestions;
+            this.resAllData = response.data;
+            this.examPaper = this.resAllData.examQuestions;
             resolve(response);
           })
           .catch(error => {
@@ -67,7 +70,16 @@ export default {
       });
     },
     submitAnswer() {
-      console.log(this.examPaper);
+      return new Promise((resolve, reject) => {
+        submitExamPaper(this.resAllData, getCookie())
+          .then(response => {
+            
+            resolve(response);
+          })
+          .catch(error => {
+            reject(error);
+          });
+      });
     }
   },
   components: {

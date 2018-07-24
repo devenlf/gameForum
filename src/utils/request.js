@@ -14,9 +14,6 @@ const service = axios.create({
 
 //http请求拦截器
 service.interceptors.request.use(config => {
-  // if (store.getters.cookie) {
-  //   config.headers['xauthToken'] = store.getters.cookie
-  // }
   console.log(config)
   return config
 }, error => {
