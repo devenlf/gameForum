@@ -4,32 +4,85 @@
         <div class="paper-header"><h4>《上海护理》2018年第三期护理研究设计</h4></div>
         <div class="paper-line">
              <div class="paper-body">
-              <div class="problem">
-                  <h4>1.   你好拿到哪里的六点就爱上了多年啦</h4>
-                    <ul>
-                        <li>A</li>
-                        <li>B</li>
-                        <li>C</li>
-                        <li>D</li>
-                    </ul>
-                    <el-radio-group v-model="radio2">
-                    <el-radio :label="0">备选项</el-radio>
-                    <el-radio :label="1">备选项</el-radio>
-                    <el-radio :label="2">备选项</el-radio>
-                    <el-radio :label="3">备选项</el-radio>
-                </el-radio-group>
-              </div>
+              <template v-for="(data,index) in examPaper">
+                   <v-radio v-if="data.type===2" @changeRadioAnswer="radioFunction" :key="index" v-bind:radio-data="data" v-bind:quesion-index="index"></v-radio>
+                   <v-checkList v-if="data.type===3" @changeCheckboxAnswer="checkboxFunction" :key="index" v-bind:radio-data="data" v-bind:quesion-index="index"></v-checkList>
+              </template>
               <v-cueexam v-if="false"></v-cueexam>
               <v-cueunanswer v-if="false"></v-cueunanswer>
-              <v-suresubmit></v-suresubmit>
+              <v-suresubmit v-if="false"></v-suresubmit>
         </div>
         </div>
         <div class="paper-footer">
-            <button type="button" class="btn submit-paper">提交答案</button>
+            <button type="button" @click="submitAnswer" class="btn submit-paper">提交答案</button>
         </div>
     </div>
 </div>
 </template>
+
+<script>
+import cueexam from "@/components/cueexam/cueexam";
+import cueunanswer from "@/components/cueunanswer/cueunanswer";
+import suresubmit from "@/components/suresubmit/suresubmit";
+import { createExamPaper } from "@/api/exam";
+import { getCookie } from "@/utils/cookieFunction";
+import radio from "@/components/radio/radio";
+import checkList from "@/components/checkList/checkList";
+
+export default {
+  data() {
+    return {
+      examPaper: []
+    };
+  },
+  created: function() {
+    this.getPaperInfo(this.$route.query.num);
+  },
+  methods: {
+    getPaperInfo: function(index) {
+      return new Promise((resolve, reject) => {
+        createExamPaper(index, getCookie())
+          .then(response => {
+            this.examPaper = response.data.examQuestions;
+            resolve(response);
+          })
+          .catch(error => {
+            reject(error);
+          });
+      });
+    },
+    radioFunction(data) {
+      this.examPaper[data.num].options.forEach(element => {
+        if (element.choose) {
+          element.choose = false;
+        }
+      });
+      this.examPaper[data.num].options[data.currentSelect].choose = true;
+    },
+    checkboxFunction(data) {
+      this.examPaper[data.num].options.forEach((element,index) => {
+        if(data.selectArray.indexOf(index)!==-1){
+          this.examPaper[data.num].options[index].choose = true;
+        }
+      });
+    },
+    submitAnswer() {
+      console.log(this.examPaper);
+    }
+  },
+  components: {
+    "v-cueexam": cueexam,
+    "v-cueunanswer": cueunanswer,
+    "v-suresubmit": suresubmit,
+    "v-radio": radio,
+    "v-checkList": checkList
+  }
+};
+</script>
+
+
+
+
 <style lang="scss">
 .submit-paper {
   margin: 10px auto;
@@ -114,6 +167,24 @@
 .el-radio-group {
   margin-left: 20px;
   .el-radio__label {
+    font-size: 14px;
+    padding-left: 20px;
+    font-weight: 500;
+    color: #333;
+  }
+}
+.el-checkbox + .el-checkbox {
+  margin-left: 0px;
+}
+.el-checkbox {
+  display: block;
+  left: 0px;
+  line-height: 16px;
+  margin-top: 2px;
+}
+.el-checkbox-group {
+  margin-left: 20px;
+  .el-checkbox__label {
     font-size: 16px;
     padding-left: 20px;
   }
@@ -131,21 +202,3 @@
 }
 </style>
 
-<script>
-import cueexam from "@/components/cueexam/cueexam";
-import cueunanswer from "@/components/cueunanswer/cueunanswer";
-import suresubmit from "@/components/suresubmit/suresubmit";
-export default {
-  data() {
-    return {
-      radio2: 1,
-      radio1: ""
-    };
-  },
-  components: {
-    "v-cueexam": cueexam,
-    "v-cueunanswer":cueunanswer,
-    "v-suresubmit":suresubmit
-  }
-};
-</script>

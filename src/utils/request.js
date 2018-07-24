@@ -5,24 +5,24 @@
 import axios from 'axios'
 import store from '@/store'
 import { getCookie } from '@/utils/cookieFunction';
-// import { Loading, Message } from 'element-ui'
+import { Loading, Message } from 'element-ui'
 // 创建axios实例
 const service = axios.create({
-  baseURL: 'http://mock.31huiyi.com/mock/11/', // api的base_url
+  baseURL: 'http://mock.31huiyi.com/mock/11/nurseLearning-mobile/', // api的base_url
   timeout: 5000 // 请求超时时间
 })
 
 //http请求拦截器
 service.interceptors.request.use(config => {
-  if (store.getters.cookie) {
-    config.headers['xauthToken'] = store.getters.cookie
-  }
+  // if (store.getters.cookie) {
+  //   config.headers['xauthToken'] = store.getters.cookie
+  // }
   console.log(config)
   return config
 }, error => {
-  // Message.error({
-  //   message: '加载超时'
-  // })
+  Message.error({
+    message: '加载超时'
+  })
   return Promise.reject(error)
 })
 

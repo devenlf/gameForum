@@ -20,7 +20,7 @@
         <td>{{data.bookname}}</td>
         <td>{{data.examtime}}</td>
         <td class="guide" data-toggle="modal" data-target="#myModal2"  @click="showPsd">{{data.examGuide}}</td>
-        <td class="testing" data-toggle="modal" data-target="#myModal" @click="showExamInfo(index)">{{data.text}}</td>
+        <td class="testing" data-toggle="modal" data-target="#myModal" @click="showExamInfo(data.examId)">{{data.text}}</td>
         </tr>
         </template>
         </tbody>
@@ -54,7 +54,7 @@
                         <span>总题目数量:</span>{{currentExam.num}}<span>总分：</span>{{currentExam.scale}}
                   </div>
                   <div class="examtimes">
-                        <span>考试周期：</span>{{currentExam.examtime}}
+                        <span>考试周期：</span>"{{currentExam.begin}}" 至 "{{currentExam.end}}"
                   </div>
               </div>
           </div>
@@ -82,13 +82,17 @@
 </template>
 <script>
 var PDF = require("@/assets/js/pdfobject.js");
+import { examInfo } from "@/api/exam";
+import { getCookie } from "../../utils/cookieFunction";
+
 export default {
   data() {
     return {
       name: "小红",
       currentExam: {
         name: "钢铁是怎么样连城的",
-        examtime: "2018/01/20 至 2018/09/20",
+        begin: "",
+        end: "",
         num: 20,
         scale: 100
       },
@@ -100,7 +104,8 @@ export default {
           finished: 20,
           unfinish: 0,
           examGuide: "在线阅读",
-          text: "测试"
+          text: "测试",
+          examId: 2
         },
         {
           bookname: "钢铁是怎么样连城的",
@@ -108,7 +113,8 @@ export default {
           finished: 20,
           unfinish: 0,
           examGuide: "在线阅读",
-          text: "测试"
+          text: "测试",
+          examId: 2
         },
         {
           bookname: "钢铁是怎么样连城的",
@@ -116,7 +122,8 @@ export default {
           finished: 20,
           unfinish: 0,
           examGuide: "在线阅读",
-          text: "测试"
+          text: "测试",
+          examId: 2
         },
         {
           bookname: "钢铁是怎么样连城的",
@@ -124,7 +131,8 @@ export default {
           finished: 20,
           unfinish: 0,
           examGuide: "在线阅读",
-          text: "测试"
+          text: "测试",
+          examId: 2
         },
         {
           bookname: "钢铁是怎么样连城的",
@@ -132,7 +140,8 @@ export default {
           finished: 20,
           unfinish: 0,
           examGuide: "在线阅读",
-          text: "测试"
+          text: "测试",
+          examId: 2
         },
         {
           bookname: "钢铁是怎么样连城的",
@@ -140,7 +149,8 @@ export default {
           finished: 20,
           unfinish: 0,
           examGuide: "在线阅读",
-          text: "测试"
+          text: "测试",
+          examId: 2
         },
         {
           bookname: "钢铁是怎么样连城的",
@@ -148,7 +158,8 @@ export default {
           finished: 20,
           unfinish: 0,
           examGuide: "在线阅读",
-          text: "测试"
+          text: "测试",
+          examId: 2
         }
       ]
     };
@@ -156,16 +167,47 @@ export default {
   created: function() {},
   methods: {
     showExamInfo: function(index) {
-      console.log(index);
+      this.getExamInfo(index).then(response => {
+        let beginTime = new Date(response.data.data.beginOpenTime);
+        let beginStr =
+          beginTime.getFullYear() +
+          "年" +
+          beginTime.getMonth() +
+          "月" +
+          beginTime.getDay() +
+          "日";
+        let endTime = new Date(response.data.data.endOpenTime);
+        let endStr =
+          beginTime.getFullYear() +
+          "年" +
+          beginTime.getMonth() +
+          "月" +
+          beginTime.getDay() +
+          "日";
+        this.name = $.parseJSON(getCookie()).data.name;
+        this.currentExam.name = response.data.data.title;
+        this.currentExam.num = response.data.data.totalQuestions;
+        this.currentExam.scale = response.data.data.fullMarks;
+        this.currentExam.begin = beginStr;
+        this.currentExam.end = endStr;
+      });
+    },
+    getExamInfo: function(index) {
+      return new Promise((resolve, reject) => {
+        examInfo(index, getCookie())
+          .then(response => {
+            resolve(response);
+          })
+          .catch(error => {
+            reject(error);
+          });
+      });
     },
     showPsd() {
-      PDF.PDFObject.embed(
-        "/static/pdf/12313.pdf",
-        "#psd-content"
-      );
+      PDF.PDFObject.embed("/static/pdf/12313.pdf", "#psd-content");
     },
     goToExam() {
-      this.$router.push({ path: "examination" });
+      this.$router.push({ path: "examination" ,query:{num:333}});
     }
   }
 };
