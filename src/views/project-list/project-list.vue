@@ -18,9 +18,9 @@
         <template v-for="(data) in examData">
         <tr :key="data.id">
         <td>{{data.bookname}}</td>
-        <td>{{data.examtime}}</td>
-        <td class="guide" data-toggle="modal" data-target="#myModal2"  @click="showPsd">{{data.examGuide}}</td>
-        <td class="testing" data-toggle="modal" data-target="#myModal" @click="showExamInfo(data.examId)">{{data.text}}</td>
+        <td>{{data.beginTime}}-{{data.endTime}}</td>
+        <td class="guide" data-toggle="modal" data-target="#myModal2"  @click="showPDF(data.examGuide)">在线阅读</td>
+        <td class="testing"  data-target="#myModal" @click="showExamInfo(data.examId,data.examGuide)">测试</td>
         </tr>
         </template>
         </tbody>
@@ -84,45 +84,46 @@
 var PDF = require("@/assets/js/pdfobject.js");
 import { examInfo } from "@/api/exam";
 import { examList } from "@/api/exam";
+import { coursePDF } from "@/api/course";
+import { userStudy } from "@/api/exam";
 import { getCookie } from "../../utils/cookieFunction";
+import { Message } from "element-ui";
 
 export default {
   data() {
     return {
-      name: "小红",
+      name: "",
       currentExam: {
-        name: "钢铁是怎么样连城的",
+        name: "",
         begin: "",
         end: "",
         num: 20,
         scale: 100
       },
-
-      examData: [
-        {
-          bookname: "钢铁是怎么样连城的",
-          examtime: "一周",
-          finished: 20,
-          unfinish: 0,
-          examGuide: "在线阅读",
-          text: "测试",
-          examId: 2
-        }
-      ]
+      examData: []
     };
   },
   created: function() {
-    this.showListExam()
+    this.showListExam();
   },
   methods: {
     showListExam: function(params) {
-      this.getListData();
+      this.getListData().then(response => {
+        response.data.data.forEach(element => {
+          let dataJson = {};
+          dataJson.bookname = element.courseName;
+          dataJson.beginTime = this.timeFomat(element.createTime);
+          dataJson.endTime = this.timeFomat(element.endOpenTime);
+          dataJson.examGuide = element.courseId;
+          dataJson.examId = element.id;
+          this.examData.push(dataJson);
+        });
+      });
     },
     getListData: function() {
       return new Promise((resolve, reject) => {
         examList(getCookie())
           .then(response => {
-            console.log(response)
             resolve(response);
           })
           .catch(error => {
@@ -130,31 +131,59 @@ export default {
           });
       });
     },
-    showExamInfo: function(index) {
-      this.getExamInfo(index).then(response => {
-        let beginTime = new Date(response.data.data.beginOpenTime);
-        let beginStr =
-          beginTime.getFullYear() +
-          "年" +
-          beginTime.getMonth() +
-          "月" +
-          beginTime.getDay() +
-          "日";
-        let endTime = new Date(response.data.data.endOpenTime);
-        let endStr =
-          beginTime.getFullYear() +
-          "年" +
-          beginTime.getMonth() +
-          "月" +
-          beginTime.getDay() +
-          "日";
-        this.name = $.parseJSON(getCookie()).data.name;
-        this.currentExam.name = response.data.data.title;
-        this.currentExam.num = response.data.data.totalQuestions;
-        this.currentExam.scale = response.data.data.fullMarks;
-        this.currentExam.begin = beginStr;
-        this.currentExam.end = endStr;
+
+    showExamInfo: function(examId, courseId) {
+      //判断是否可以考试
+      userStudy(courseId, getCookie()).then(response => {
+        let status = response.data.data;
+        console.log(typeof status);
+        switch (status) {
+          case "0":
+            Message.error({
+              message: "您当前未参加该课程"
+            });
+            break;
+          case "1":
+            Message.error({
+              message: "学习中，学时不够"
+            });
+            break;
+          case "2":
+            $("#myModal").modal()
+            this.getExamInfo(examId).then(response => {
+              let beginTime = this.timeFomat(response.data.data.beginOpenTime);
+              let endTime = this.timeFomat(response.data.data.endOpenTime);
+              this.name = $.parseJSON(getCookie()).data.name;
+              this.currentExam.name = response.data.data.title;
+              this.currentExam.num = response.data.data.totalQuestions;
+              this.currentExam.scale = response.data.data.fullMarks;
+              this.currentExam.begin = beginTime;
+              this.currentExam.end = endTime;
+            });
+            break;
+          case "3":
+            Message({
+              message: "考试合格,结束",
+              type: "success"
+            });
+            break;
+          default:
+            Message.error({
+              message: "未知错误"
+            });
+        }
       });
+    },
+    timeFomat(data) {
+      let time = new Date(data);
+      let timeStr =
+        time.getFullYear() +
+        "年" +
+        time.getMonth() +
+        "月" +
+        time.getDay() +
+        "日";
+      return timeStr;
     },
     getExamInfo: function(index) {
       return new Promise((resolve, reject) => {
@@ -167,8 +196,22 @@ export default {
           });
       });
     },
-    showPsd() {
-      PDF.PDFObject.embed("/static/pdf/12313.pdf", "#psd-content");
+    showPDF(id) {
+      this.getPDF(id).then(response => {
+        let url = response.data.data.courseFileInfo[0].fileUrl;
+        PDF.PDFObject.embed(url, "#psd-content");
+      });
+    },
+    getPDF(index) {
+      return new Promise((resolve, reject) => {
+        coursePDF(index, getCookie())
+          .then(response => {
+            resolve(response);
+          })
+          .catch(error => {
+            reject(error);
+          });
+      });
     },
     goToExam() {
       this.$router.push({ path: "examination", query: { num: 333 } });

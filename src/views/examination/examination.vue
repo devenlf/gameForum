@@ -9,8 +9,8 @@
                    <v-checkList v-if="data.type===3" @changeCheckboxAnswer="checkboxFunction" :key="index" v-bind:radio-data="data" v-bind:quesion-index="index"></v-checkList>
               </template>
               <v-cueexam v-if="false"></v-cueexam>
-              <v-cueunanswer v-if="false"></v-cueunanswer>
-              <v-suresubmit v-if="false"></v-suresubmit>
+              <v-cueunanswer @closebox="closeBox1" :completeData="answerData" :isComplete="isComplete" v-if="isComplete"></v-cueunanswer>
+              <v-suresubmit @submit="submitData" @closebox="closeBox2" v-if="isSubmit" :isSubmit="isSubmit" :completeData="answerData"></v-suresubmit>
         </div>
         </div>
         <div class="paper-footer">
@@ -33,8 +33,12 @@ import checkList from "@/components/checkList/checkList";
 export default {
   data() {
     return {
-      resAllData:{},
-      examPaper: []
+      answeredNum: [],
+      resAllData: {},
+      examPaper: [],
+      isComplete:false,
+      isSubmit:false,
+      answerData:{}
     };
   },
   created: function() {
@@ -61,25 +65,53 @@ export default {
         }
       });
       this.examPaper[data.num].options[data.currentSelect].choose = true;
+      this.isPushInArray(data.num);
     },
     checkboxFunction(data) {
-      this.examPaper[data.num].options.forEach((element,index) => {
-        if(data.selectArray.indexOf(index)!==-1){
+      this.examPaper[data.num].options.forEach((element, index) => {
+        if (data.selectArray.indexOf(index) !== -1) {
           this.examPaper[data.num].options[index].choose = true;
         }
       });
+      this.isPushInArray(data.num);
     },
-    submitAnswer() {
-      return new Promise((resolve, reject) => {
+    closeBox1(){
+        this.isComplete=false;
+    },
+    closeBox2(){
+        this.isSubmit=false;
+    },
+    submitData(){
+    return new Promise((resolve, reject) => {
         submitExamPaper(this.resAllData, getCookie())
           .then(response => {
-            
+            this.$router.push({ path: "grade", query: { data: response } });
             resolve(response);
           })
           .catch(error => {
             reject(error);
           });
       });
+    },
+    isPushInArray(num) {
+      if (this.answeredNum.indexOf(num) === -1) {
+        this.answeredNum.push(num);
+      }
+    },
+    submitAnswer() {
+      this.answerData.len = this.examPaper.length;
+      this.answerData.answeredLen = this.answeredNum.length;
+      this.answerData.unanswer = [];
+      for(let i = 0;i<this.examPaper.length; i++){
+        if(this.answeredNum.indexOf(i)===-1){
+          this.answerData.unanswer.push(i)
+        }
+      }
+      if(this.examPaper.length>this.answeredNum.length){
+        this.isComplete=true
+      }else if(this.examPaper.length===this.answeredNum.length){
+        this.isSubmit=true
+      }
     }
   },
   components: {
@@ -152,6 +184,7 @@ export default {
   overflow: scroll;
   height: 100%;
   padding-left: 20px;
+  padding-bottom: 100px;
 }
 
 .paper-footer {

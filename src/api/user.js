@@ -7,7 +7,10 @@ export function login(account,password) {
     }
     return service({
       url: 'login2',
-      method: 'post',
+      method: 'POST',
+      headers:{
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
       data
     })
   }

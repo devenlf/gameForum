@@ -17,7 +17,7 @@
         </div>
         <div class="row-line">
           <i></i><button class="btn plugin-sub login-btn waves-effect waves-light" @click="loginUser" type="submit">登录</button>
-          <span id="info">温馨提示:用户名不能为空.</span>
+          <span id="info">温馨提示:用户名不能为空.</span>z
         </div>
       </div>
       <div class="read-book">

@@ -2,29 +2,29 @@
    <div id="cueunanswer" class="v-cueunanswer">
        <div class="cueunanswer-header">温馨提示</div>
        <div class="cueunanswer-body">
-           <h4>总共[20]题,您已答[0]题,剩余[20]题未答,提交试卷后,成绩将会生效,请确认是否提交试卷!</h4>
-           <p>未完成</p>
-           <p>未完成</p>
-           <p>未完成</p>
-           <p>未完成</p>
-           <p>未完成</p>
-           <p>未完成</p>
-           <p>未完成</p>
-           <p>未完成</p>
-           <p>未完成</p>
-           <p>未完成</p>
-           <p>未完成</p>
+           <h4>总共[{{completeData.len}}]题,您已答[{{completeData.answeredLen}}]题,剩余[{{completeData.unanswer.length}}}]题未答,提交试卷后,成绩将会生效,请确认是否提交试卷!</h4>
+           <template v-for="data in completeData.unanswer">
+                <p :key="data.id">第{{data+1}}题没有选择答案</p>
+           </template>
        </div>
        <div class="cueunanswer-footer">
-            <button type="button" class="btn sure-btn">继续答题</button>
+            <button type="button" @click="closeBox" class="btn sure-btn">继续答题</button>
        </div>
     </div> 
 </template>
 
 <script>
 export default {
+  props: {
+    completeData: {}
+  },
   data() {
     return {};
+  },
+  methods:{
+    closeBox(){
+      this.$emit('closebox')
+    }
   }
 };
 </script>
@@ -33,8 +33,6 @@ export default {
 .cueunanswer-body {
   font-size: 16px;
   padding: 0px 16px;
-  h4 {
-  }
   p {
     line-height: 14px;
   }

@@ -39,7 +39,6 @@ export function createExamPaper(id, token) {
 //提交考试接口
 export function submitExamPaper(submitData, token) {
     const data = submitData;
-    console.log(data)
     return service({
         url: "mobile/exam/submit/0",
         method: 'POST',
@@ -47,5 +46,16 @@ export function submitExamPaper(submitData, token) {
             'xauthToken': $.parseJSON(token).token,
         },
         data
+    })
+}
+//用户考试状态
+export function userStudy(id, token) {
+    return service({
+        url: "/mobile/course/status/"+ id + "",
+        method: 'GET',
+        params: {
+            'xauthToken': $.parseJSON(token).token,
+            'courseId':id
+        }
     })
 }
