@@ -7,21 +7,32 @@
             </div>
             <div class="show-score">
                 <h5>您已完成答题!</h5>
-                <p class="score">您的得分为:<span>40</span></p>
-                <p class="result">您的考试结果为:<span>不合格</span></p>
-                <p class="exam-num">您还剩余:(<span>9</span> )次考试机会</p>
-                <img src="@/assets/image/small_02.png"/>
+                <p class="score">您的得分为:<span>{{scoreData.score}}</span></p>
+                <p class="result">您的考试结果为:<span v-if="scoreData.score > scoreData.passScore">合格</span><span v-else>不合格</span></p>
+                <p class="exam-num">您还剩余:(<span>{{scoreData.consumeTime}}</span> )次考试机会</p>
+                <template v-if="scoreData.score > scoreData.passScore">
+                            <img src="@/assets/image/small_01.png"/>
+                </template>
+                <template v-else>
+                            <img src="@/assets/image/small_02.png"/>
+                </template>
             </div>
         </div>
     </div>
 </div>
 </template>
 <script>
+import { removeCookie } from "@/utils/cookieFunction";
 export default {
   data() {
     return {
-      name: "小红"
+      scoreData: {}
     };
+  },
+  created: function() {
+    $('body').removeClass('modal-open');
+    this.scoreData = this.$route.query.data;
+    removeCookie('isComplete');
   }
 };
 </script>
@@ -33,27 +44,27 @@ export default {
   padding: 30px 0;
 }
 
-.show-score{
-    position: relative;
-    margin: 40px 0 0 40px;
-    h5{
-        font-weight: bold;
-        color: #6DA047
-    }
-    p{
-        font-weight: bold;
-    }
-    span{
-        margin-left: 5px;
-        color: red;
-    }
-    img{
-        display: block;
-        position: absolute;
-        width: 70px;
-        top:0px;
-        left: 160px;
-    }
+.show-score {
+  position: relative;
+  margin: 40px 0 0 40px;
+  h5 {
+    font-weight: bold;
+    color: #6da047;
+  }
+  p {
+    font-weight: bold;
+  }
+  span {
+    margin-left: 5px;
+    color: red;
+  }
+  img {
+    display: block;
+    position: absolute;
+    width: 70px;
+    top: 0px;
+    left: 160px;
+  }
 }
 
 .project {
@@ -75,5 +86,4 @@ export default {
   border: 1px solid #ccc;
   padding: 7px 20px;
 }
-
 </style>

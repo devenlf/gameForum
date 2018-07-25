@@ -88,6 +88,7 @@ import { coursePDF } from "@/api/course";
 import { userStudy } from "@/api/exam";
 import { getCookie } from "../../utils/cookieFunction";
 import { Message } from "element-ui";
+import Cookies from 'js-cookie'
 
 export default {
   data() {
@@ -100,6 +101,7 @@ export default {
         num: 20,
         scale: 100
       },
+      passScore: "",
       examData: []
     };
   },
@@ -149,7 +151,7 @@ export default {
             });
             break;
           case "2":
-            $("#myModal").modal()
+            $("#myModal").modal();
             this.getExamInfo(examId).then(response => {
               let beginTime = this.timeFomat(response.data.data.beginOpenTime);
               let endTime = this.timeFomat(response.data.data.endOpenTime);
@@ -159,6 +161,7 @@ export default {
               this.currentExam.scale = response.data.data.fullMarks;
               this.currentExam.begin = beginTime;
               this.currentExam.end = endTime;
+              this.passScore = response.data.data.passScore;
             });
             break;
           case "3":
@@ -214,7 +217,11 @@ export default {
       });
     },
     goToExam() {
-      this.$router.push({ path: "examination", query: { num: 333 } });
+      Cookies.set('isComplete','OK')
+      this.$router.push({
+        path: "examination",
+        query: { num: 333, passScore: this.passScore }
+      });
     }
   }
 };

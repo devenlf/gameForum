@@ -29,6 +29,7 @@ import { submitExamPaper } from "@/api/exam";
 import { getCookie } from "@/utils/cookieFunction";
 import radio from "@/components/radio/radio";
 import checkList from "@/components/checkList/checkList";
+import _ from 'lodash'
 
 export default {
   data() {
@@ -36,13 +37,15 @@ export default {
       answeredNum: [],
       resAllData: {},
       examPaper: [],
-      isComplete:false,
-      isSubmit:false,
-      answerData:{}
+      isComplete: false,
+      isSubmit: false,
+      answerData: {},
+      passScore: ""
     };
   },
   created: function() {
     this.getPaperInfo(this.$route.query.num);
+    this.passScore = this.$route.query.passScore;
   },
   methods: {
     getPaperInfo: function(index) {
@@ -71,27 +74,38 @@ export default {
       this.examPaper[data.num].options.forEach((element, index) => {
         if (data.selectArray.indexOf(index) !== -1) {
           this.examPaper[data.num].options[index].choose = true;
+        } else {
+          this.examPaper[data.num].options[index].choose = false;
         }
       });
-      this.isPushInArray(data.num);
+      if (data.selectArray.length) {
+        this.isPushInArray(data.num);
+      }else{
+        this.removeoutArray(data.num)
+      }
     },
-    closeBox1(){
-        this.isComplete=false;
+    closeBox1() {
+      this.isComplete = false;
     },
-    closeBox2(){
-        this.isSubmit=false;
+    closeBox2() {
+      this.isSubmit = false;
     },
-    submitData(){
-    return new Promise((resolve, reject) => {
+    submitData() {
+      return new Promise((resolve, reject) => {
         submitExamPaper(this.resAllData, getCookie())
           .then(response => {
-            this.$router.push({ path: "grade", query: { data: response } });
+            let data = response.data.data;
+            data.passScore = this.passScore;
+            this.$router.push({ path: "grade", query: { data: data } });
             resolve(response);
           })
           .catch(error => {
             reject(error);
           });
       });
+    },
+    removeoutArray(num){
+     this.answeredNum = _.pull(this.answeredNum, num);
     },
     isPushInArray(num) {
       if (this.answeredNum.indexOf(num) === -1) {
@@ -102,15 +116,16 @@ export default {
       this.answerData.len = this.examPaper.length;
       this.answerData.answeredLen = this.answeredNum.length;
       this.answerData.unanswer = [];
-      for(let i = 0;i<this.examPaper.length; i++){
-        if(this.answeredNum.indexOf(i)===-1){
-          this.answerData.unanswer.push(i)
+      console.log(this.examPaper);
+      for (let i = 0; i < this.examPaper.length; i++) {
+        if (this.answeredNum.indexOf(i) === -1) {
+          this.answerData.unanswer.push(i);
         }
       }
-      if(this.examPaper.length>this.answeredNum.length){
-        this.isComplete=true
-      }else if(this.examPaper.length===this.answeredNum.length){
-        this.isSubmit=true
+      if (this.examPaper.length > this.answeredNum.length) {
+        this.isComplete = true;
+      } else if (this.examPaper.length === this.answeredNum.length) {
+        this.isSubmit = true;
       }
     }
   },

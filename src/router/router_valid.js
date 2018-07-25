@@ -8,7 +8,15 @@ router.beforeEach((to, from, next) => {
         next();
     } else {
         if (isLogin) { //如果有就直接到首页
-            next();
+            if(to.path === '/examination' ){
+                if(getCookie('isComplete') && getCookie('isComplete') !== 'undefined'){
+                    next();
+                }else{
+                    next('/project')
+                }
+            }else{
+                next();
+            }
         } else {
             //不然就跳转到登录；
             next('/login');
