@@ -92,6 +92,7 @@ export default {
       color: #9b2c54;
       margin-left: 14px;
       margin-right: 16px;
+      cursor: pointer;
     }
     .time1 {
       color: #9b2c54;

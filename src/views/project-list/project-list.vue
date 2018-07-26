@@ -15,7 +15,7 @@
         </tr>
         </thead>
         <tbody>
-        <template v-for="(data) in examData">
+        <template v-for="(data) in currentShowData">
         <tr :key="data.id">
         <td>{{data.bookname}}</td>
         <td>{{data.beginTime}}-{{data.endTime}}</td>
@@ -26,10 +26,10 @@
         </tbody>
         </table>
         <div class="buttom-group">
-            <button type="button" class="btn num-btn">5</button>
-            <button type="button" class="btn num-btn">10</button>
-            <button type="button" class="btn num-btn">15</button>
-            <button type="button" class="btn num-btn">20</button>
+            <button type="button" @click="showDataNum(5)" class="btn num-btn">5</button>
+            <button type="button" @click="showDataNum(25)" class="btn num-btn">25</button>
+            <button type="button" @click="showDataNum(50)" class="btn num-btn">50</button>
+            <button type="button" @click="showDataNum(100)" class="btn num-btn">100</button>
         </div>
         </div>
     </div>
@@ -102,7 +102,8 @@ export default {
         scale: 100
       },
       passScore: "",
-      examData: []
+      examData: [],
+      currentShowData:[]
     };
   },
   created: function() {
@@ -120,7 +121,14 @@ export default {
           dataJson.examId = element.id;
           this.examData.push(dataJson);
         });
+        this.initShowData();
       });
+    },
+    initShowData(){
+      this.showDataNum(5)
+    },
+    showDataNum(num){
+      this.currentShowData = this.examData.slice(0,num)
     },
     getListData: function() {
       return new Promise((resolve, reject) => {
@@ -238,7 +246,7 @@ export default {
 }
 .buttom-group {
   padding-bottom: 3px;
-  padding-left: 386px;
+  padding-left: 380px;
 }
 .num-btn {
   background: #b62f60;

@@ -17,7 +17,7 @@
         </div>
         <div class="row-line">
           <i></i><button class="btn plugin-sub login-btn waves-effect waves-light" @click="loginUser" type="submit">登录</button>
-          <span id="info">温馨提示:用户名不能为空.</span>z
+          <span id="info">{{cueMessage}}</span>
         </div>
       </div>
       <div class="read-book">
@@ -64,6 +64,7 @@ import header from "@/components/header/header";
 export default {
   data() {
     return {
+      cueMessage: "",
       loginInfo: {
         account: "admin",
         password: "admin"
@@ -81,6 +82,20 @@ export default {
     };
   },
   created: function() {},
+  watch: {
+    loginInfo: {
+      handler(value, oldValue) {
+        if(value.account===''){
+          this.cueMessage='用户名不得为空'
+        }else if(value.password===''){
+          this.cueMessage='密码不得为空'
+        }else{
+          this.cueMessage=''
+        }
+      },
+      deep: true
+    }
+  },
   methods: {
     openBook: function() {
       this.currentPage = 0;
@@ -109,8 +124,8 @@ export default {
           if (response.data.success) {
             $this.loginloading = false;
             $this.$router.push({ path: "/" });
-          }else{
-            console.log('登录信息错误');
+          } else {
+            this.cueMessage='登录信息填写有误'
           }
         })
         .catch(() => {
