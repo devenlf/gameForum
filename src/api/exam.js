@@ -3,37 +3,22 @@ import service from '@/utils/request'
 //考试列表接口
 export function examList(token) {
     return service({
-        url: "student/exam",
-        method: 'POST',
-        params: {
-            xauthToken: $.parseJSON(token).token,
-            page: 0,
-            rows: 1
-        },
+        url: "mobile/exam/list",
+        method: 'GET'
     })
 }
 //考试详情接口
 export function examInfo(id, token) {
     return service({
         url: "mobile/exam/" + id + "",
-        method: 'GET',
-        params: {
-            examId: id,
-            xauthToken: $.parseJSON(token).token
-        },
+        method: 'GET'
     })
 }
 //考题生成接口
-export function createExamPaper(id, token) {
+export function createExamPaper(id) {
     return service({
-        url: "mobile/exam/start/" + id + "",
-        method: 'GET',
-        params: {
-            examId: id
-        },
-        headers: {
-            'xauthToken': $.parseJSON(token).token,
-        }
+        url: "mobile/exam/start/"+id+"",
+        method: 'GET'
     })
 }
 //提交考试接口
@@ -42,20 +27,16 @@ export function submitExamPaper(submitData, token) {
     return service({
         url: "mobile/exam/submit/0",
         method: 'POST',
-        headers: {
-            'xauthToken': $.parseJSON(token).token,
-        },
         data
     })
 }
 //用户考试状态
 export function userStudy(id, token) {
     return service({
-        url: "/mobile/course/status/"+ id + "",
+        url: "/mobile/course/status/" + id + "",
         method: 'GET',
         params: {
-            'xauthToken': $.parseJSON(token).token,
-            'courseId':id
+            'courseId': id
         }
     })
 }

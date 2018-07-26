@@ -14,6 +14,7 @@
         </form>
         <div class="row-line">
              <i></i><input type="text" name="verification" id="verification" class="form-control validate" value="验证码">
+             <img class="code" src="../../../static/img/timg.jpg" />
         </div>
         <div class="row-line">
           <i></i><button class="btn plugin-sub login-btn waves-effect waves-light" @click="loginUser" type="submit">登录</button>
@@ -66,9 +67,10 @@ export default {
     return {
       cueMessage: "",
       loginInfo: {
-        account: "admin",
-        password: "admin"
+        account: "201811111112",
+        password: "123456"
       },
+      canSubmit: false,
       currentPage: 0,
       guideBook: [
         { img: "/static/img/1.png" },
@@ -85,12 +87,13 @@ export default {
   watch: {
     loginInfo: {
       handler(value, oldValue) {
-        if(value.account===''){
-          this.cueMessage='用户名不得为空'
-        }else if(value.password===''){
-          this.cueMessage='密码不得为空'
-        }else{
-          this.cueMessage=''
+        if (value.account === "") {
+          this.cueMessage = "用户名不得为空";
+        } else if (value.password === "") {
+          this.cueMessage = "密码不得为空";
+        } else {
+          this.cueMessage = "";
+          this.canSubmit = true;
         }
       },
       deep: true
@@ -121,11 +124,12 @@ export default {
           password: this.loginInfo.password
         })
         .then(response => {
+          console.log(response);
           if (response.data.success) {
             $this.loginloading = false;
             $this.$router.push({ path: "/" });
           } else {
-            this.cueMessage='登录信息填写有误'
+            this.cueMessage = "登录信息填写有误";
           }
         })
         .catch(() => {
@@ -149,6 +153,14 @@ export default {
 }
 .modal-body {
   text-align: center;
+}
+#verification {
+  float: left;
+}
+.code {
+  width: 140px;
+  margin-top: 5px;
+  margin-left: 35px;
 }
 </style>
 

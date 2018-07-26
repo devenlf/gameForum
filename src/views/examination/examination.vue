@@ -44,14 +44,16 @@ export default {
     };
   },
   created: function() {
-    this.getPaperInfo(this.$route.query.num);
     this.passScore = this.$route.query.passScore;
+    this.getPaperInfo(this.$route.query.num);
   },
   methods: {
     getPaperInfo: function(index) {
+      console.log(index,this.passScore)
       return new Promise((resolve, reject) => {
-        createExamPaper(index, getCookie())
+        createExamPaper(index)
           .then(response => {
+            console.log(response)
             this.resAllData = response.data;
             this.examPaper = this.resAllData.examQuestions;
             resolve(response);

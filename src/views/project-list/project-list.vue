@@ -60,7 +60,7 @@
           </div>
       </div>
       <div class="modal-footer">
-        <button type="button" @click="goToExam" class="btn begin-exam">开始考试</button>
+        <button type="button" @click="goToExam(currentExam.examId)" class="btn begin-exam">开始考试</button>
       </div>
     </div>
   </div>
@@ -99,7 +99,8 @@ export default {
         begin: "",
         end: "",
         num: 20,
-        scale: 100
+        scale: 100,
+        examId:"",
       },
       passScore: "",
       examData: [],
@@ -146,19 +147,19 @@ export default {
       //判断是否可以考试
       userStudy(courseId, getCookie()).then(response => {
         let status = response.data.data;
-        console.log(typeof status);
+        console.log(status);
         switch (status) {
-          case "0":
+          case 0:
             Message.error({
               message: "您当前未参加该课程"
             });
             break;
-          case "1":
+          case 1:
             Message.error({
               message: "学习中，学时不够"
             });
             break;
-          case "2":
+          case 2:
             $("#myModal").modal();
             this.getExamInfo(examId).then(response => {
               let beginTime = this.timeFomat(response.data.data.beginOpenTime);
@@ -169,10 +170,11 @@ export default {
               this.currentExam.scale = response.data.data.fullMarks;
               this.currentExam.begin = beginTime;
               this.currentExam.end = endTime;
+              this.currentExam.examId = examId;
               this.passScore = response.data.data.passScore;
             });
             break;
-          case "3":
+          case 3:
             Message({
               message: "考试合格,结束",
               type: "success"
@@ -224,11 +226,11 @@ export default {
           });
       });
     },
-    goToExam() {
+    goToExam(id) {
       Cookies.set('isComplete','OK')
       this.$router.push({
         path: "examination",
-        query: { num: 333, passScore: this.passScore }
+        query: { num: id, passScore: this.passScore }
       });
     }
   }

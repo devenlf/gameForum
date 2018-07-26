@@ -3,10 +3,6 @@ import service from '@/utils/request'
 export function coursePDF(id, token) {
     return service({
         url: "mobile/course/getCourseFileInfo/" + id + "",
-        method: 'GET',
-        params: {
-            xauthToken: $.parseJSON(token).token,
-            courseId: id
-        },
+        method: 'GET'
     })
 }
