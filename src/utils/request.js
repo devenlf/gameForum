@@ -18,18 +18,10 @@ const service = axios.create({
 service.interceptors.request.use(config => {
   // console.log($.parseJSON(getCookie('xauthToken')).token)
   if (getCookie('xauthToken')) {
-    // config.headers['xauthToken'] = $.parseJSON(getCookie('xauthToken')).token,
-    // service.defaults.headers.common['xauthToken'] = $.parseJSON(getCookie('xauthToken')).token;
     config.headers = {
       xauthToken: $.parseJSON(getCookie('xauthToken')).token
     }
-    // config.headers.common['xauthToken']='1231'
-    // config.headers.xauthToken = $.parseJSON(getCookie('xauthToken')).token
-    // config.headers = {
-    //   'xauthToken': $.parseJSON(getCookie('xauthToken')).token
-    // }
   }
-  // console.log(config.headers)
   return config
 }, error => {
   Message.error({
