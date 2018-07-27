@@ -151,17 +151,17 @@ export default {
       userStudy(courseId, getCookie()).then(response => {
         let status = response.data.data;
         switch (status) {
-          // case 0:
-          //   Message.error({
-          //     message: "您当前未参加该课程"
-          //   });
-          //   break;
-          // case 1:
-          //   Message.error({
-          //     message: "学习中，学时不够"
-          //   });
-          //   break;
-          case (0, 1, 2, 3):
+          case 0:
+            Message.error({
+              message: "您当前未参加该课程"
+            });
+            break;
+          case 1:
+            Message.error({
+              message: "学习中，学时不够"
+            });
+            break;
+          case 2:
             $("#myModal").modal();
             this.getExamInfo(examId).then(response => {
               let beginTime = this.timeFomat(response.data.data.beginOpenTime);
@@ -175,12 +175,12 @@ export default {
               this.currentExam.examId = examId;
             });
             break;
-          // case 3:
-          //   Message({
-          //     message: "考试合格,结束",
-          //     type: "success"
-          //   });
-          // break;
+          case 3:
+            Message({
+              message: "考试合格,结束",
+              type: "success"
+            });
+            break;
           default:
             Message.error({
               message: "未知错误"
@@ -227,21 +227,8 @@ export default {
           });
         })
         .then(response => {
-          this.saveFile(response);
-          // PDF.PDFObject.embed(response, "#psd-content");
+          PDF.PDFObject.embed(response, "#psd-content");
         });
-    },
-    //将文件保存到本地
-    saveFile(data) {
-      console.log(data.data);
-      let fs = require("fs");
-      fs.writeFile("../../static/pdf/temp.pdf", blob, {}, (err, res) => {
-        if (err) {
-          console.error(err);
-          return;
-        }
-        console.log("video saved");
-      });
     },
     getPDF(index) {
       return new Promise((resolve, reject) => {

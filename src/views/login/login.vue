@@ -62,6 +62,7 @@
 <script>
 import "./login.scss";
 import header from "@/components/header/header";
+import { getCookie , removeCookie} from '../../utils/cookieFunction';
 export default {
   data() {
     return {
@@ -119,6 +120,9 @@ export default {
     loginUser() {
       var $this = this;
       this.loginloading = true;
+      if(getCookie()){
+        removeCookie()
+      } 
       this.$store
         .dispatch("Login", {
           account: this.loginInfo.account,
