@@ -1,14 +1,18 @@
 import service from '@/utils/request'
 //相关接口调用
 //考试列表接口
-export function examList(token) {
+export function examList() {
     return service({
         url: "mobile/exam/list",
-        method: 'GET'
+        method: 'GET',
+        params: {
+            page: 1,
+            rows :100
+        }
     })
 }
 //考试详情接口
-export function examInfo(id, token) {
+export function examInfo(id) {
     return service({
         url: "mobile/exam/" + id + "",
         method: 'GET'
@@ -22,7 +26,7 @@ export function createExamPaper(id) {
     })
 }
 //提交考试接口
-export function submitExamPaper(submitData, token) {
+export function submitExamPaper(submitData) {
     const data = submitData;
     return service({
         url: "mobile/exam/submit/0",
@@ -31,7 +35,7 @@ export function submitExamPaper(submitData, token) {
     })
 }
 //用户考试状态
-export function userStudy(id, token) {
+export function userStudy(id) {
     return service({
         url: "/mobile/course/status/" + id + "",
         method: 'GET',

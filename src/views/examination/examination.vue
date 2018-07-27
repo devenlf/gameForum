@@ -1,10 +1,11 @@
 <template>
 <div class="exam-paper">
     <div class="page-paper" style="">
-        <div class="paper-header"><h4>《上海护理》2018年第三期护理研究设计</h4></div>
+        <div class="paper-header"><h4>{{resAllData.title}}</h4></div>
         <div class="paper-line">
              <div class="paper-body">
               <template v-for="(data,index) in examPaper">
+                  <v-radio v-if="data.type===1" @changeRadioAnswer="radioFunction" :key="index" v-bind:radio-data="data" v-bind:quesion-index="index"></v-radio>
                    <v-radio v-if="data.type===2" @changeRadioAnswer="radioFunction" :key="index" v-bind:radio-data="data" v-bind:quesion-index="index"></v-radio>
                    <v-checkList v-if="data.type===3" @changeCheckboxAnswer="checkboxFunction" :key="index" v-bind:radio-data="data" v-bind:quesion-index="index"></v-checkList>
               </template>
@@ -29,7 +30,7 @@ import { submitExamPaper } from "@/api/exam";
 import { getCookie } from "@/utils/cookieFunction";
 import radio from "@/components/radio/radio";
 import checkList from "@/components/checkList/checkList";
-import _ from 'lodash'
+import _ from "lodash";
 
 export default {
   data() {
@@ -44,17 +45,18 @@ export default {
     };
   },
   created: function() {
-    this.passScore = this.$route.query.passScore;
-    this.getPaperInfo(this.$route.query.num);
+    this.getPaperInfo(this.$route.query.num).then(data => {
+      console.log(data);
+    });
   },
   methods: {
     getPaperInfo: function(index) {
-      console.log(index,this.passScore)
       return new Promise((resolve, reject) => {
         createExamPaper(index)
           .then(response => {
-            console.log(response)
             this.resAllData = response.data;
+            this.passScore = response.data.passScore;
+            console.log(this.passScore)
             this.examPaper = this.resAllData.examQuestions;
             resolve(response);
           })
@@ -66,7 +68,7 @@ export default {
     radioFunction(data) {
       this.examPaper[data.num].options.forEach(element => {
         if (element.choose) {
-          element.choose = false;
+          delete element.choose;
         }
       });
       this.examPaper[data.num].options[data.currentSelect].choose = true;
@@ -77,13 +79,13 @@ export default {
         if (data.selectArray.indexOf(index) !== -1) {
           this.examPaper[data.num].options[index].choose = true;
         } else {
-          this.examPaper[data.num].options[index].choose = false;
+          delete this.examPaper[data.num].options[index].choose;
         }
       });
       if (data.selectArray.length) {
         this.isPushInArray(data.num);
-      }else{
-        this.removeoutArray(data.num)
+      } else {
+        this.removeoutArray(data.num);
       }
     },
     closeBox1() {
@@ -96,8 +98,9 @@ export default {
       return new Promise((resolve, reject) => {
         submitExamPaper(this.resAllData, getCookie())
           .then(response => {
-            let data = response.data.data;
-            data.passScore = this.passScore;
+            let data = response.data;
+            data.passScore = this.passScore
+            data.remainingTimes = this.$route.query.remainingTimes;
             this.$router.push({ path: "grade", query: { data: data } });
             resolve(response);
           })
@@ -106,8 +109,8 @@ export default {
           });
       });
     },
-    removeoutArray(num){
-     this.answeredNum = _.pull(this.answeredNum, num);
+    removeoutArray(num) {
+      this.answeredNum = _.pull(this.answeredNum, num);
     },
     isPushInArray(num) {
       if (this.answeredNum.indexOf(num) === -1) {
@@ -118,7 +121,6 @@ export default {
       this.answerData.len = this.examPaper.length;
       this.answerData.answeredLen = this.answeredNum.length;
       this.answerData.unanswer = [];
-      console.log(this.examPaper);
       for (let i = 0; i < this.examPaper.length; i++) {
         if (this.answeredNum.indexOf(i) === -1) {
           this.answerData.unanswer.push(i);

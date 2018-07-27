@@ -6,11 +6,12 @@ import axios from 'axios'
 import store from '@/store'
 import { getCookie } from '@/utils/cookieFunction';
 import { Message } from 'element-ui'
+
 // 创建axios实例
 const service = axios.create({
   // baseURL: 'http://117.50.14.118:8000/nurseLearning-mobile/',
   baseURL: 'http://192.168.13.252:8080/nurseLearning-mobile/',
-  timeout: 5000 // 请求超时时间
+  timeout: 50000 // 请求超时时间
 })
 
 //http请求拦截器

@@ -5,7 +5,7 @@
             <div class="box-header">
                 学分考试
             </div>
-        <table class="allData" border="0">
+        <table class="allData" border="0" v-loading="loading" element-loading-text="拼命加载中">
         <thead>
         <tr class="project-title">
         <th width="190px" >对应期刊</th>
@@ -84,11 +84,11 @@
 var PDF = require("@/assets/js/pdfobject.js");
 import { examInfo } from "@/api/exam";
 import { examList } from "@/api/exam";
-import { coursePDF } from "@/api/course";
+import { coursePDF, getPDFFile } from "@/api/course";
 import { userStudy } from "@/api/exam";
 import { getCookie } from "../../utils/cookieFunction";
-import { Message } from "element-ui";
-import Cookies from 'js-cookie'
+import { Loading, Message } from "element-ui";
+import Cookies from "js-cookie";
 
 export default {
   data() {
@@ -100,11 +100,12 @@ export default {
         end: "",
         num: 20,
         scale: 100,
-        examId:"",
+        examId: ""
       },
-      passScore: "",
+      remainingTimes: "",
+      loading: false,
       examData: [],
-      currentShowData:[]
+      currentShowData: []
     };
   },
   created: function() {
@@ -112,6 +113,7 @@ export default {
   },
   methods: {
     showListExam: function(params) {
+      this.loading = true;
       this.getListData().then(response => {
         response.data.data.forEach(element => {
           let dataJson = {};
@@ -125,11 +127,12 @@ export default {
         this.initShowData();
       });
     },
-    initShowData(){
-      this.showDataNum(5)
+    initShowData() {
+      this.loading = false;
+      this.showDataNum(5);
     },
-    showDataNum(num){
-      this.currentShowData = this.examData.slice(0,num)
+    showDataNum(num) {
+      this.currentShowData = this.examData.slice(0, num);
     },
     getListData: function() {
       return new Promise((resolve, reject) => {
@@ -147,19 +150,18 @@ export default {
       //判断是否可以考试
       userStudy(courseId, getCookie()).then(response => {
         let status = response.data.data;
-        console.log(status);
         switch (status) {
-          case 0:
-            Message.error({
-              message: "您当前未参加该课程"
-            });
-            break;
-          case 1:
-            Message.error({
-              message: "学习中，学时不够"
-            });
-            break;
-          case 2:
+          // case 0:
+          //   Message.error({
+          //     message: "您当前未参加该课程"
+          //   });
+          //   break;
+          // case 1:
+          //   Message.error({
+          //     message: "学习中，学时不够"
+          //   });
+          //   break;
+          case (0, 1, 2, 3):
             $("#myModal").modal();
             this.getExamInfo(examId).then(response => {
               let beginTime = this.timeFomat(response.data.data.beginOpenTime);
@@ -171,15 +173,14 @@ export default {
               this.currentExam.begin = beginTime;
               this.currentExam.end = endTime;
               this.currentExam.examId = examId;
-              this.passScore = response.data.data.passScore;
             });
             break;
-          case 3:
-            Message({
-              message: "考试合格,结束",
-              type: "success"
-            });
-            break;
+          // case 3:
+          //   Message({
+          //     message: "考试合格,结束",
+          //     type: "success"
+          //   });
+          // break;
           default:
             Message.error({
               message: "未知错误"
@@ -202,6 +203,8 @@ export default {
       return new Promise((resolve, reject) => {
         examInfo(index, getCookie())
           .then(response => {
+            this.remainingTimes =
+              response.data.data.totalcount - response.data.data.useExamCount;
             resolve(response);
           })
           .catch(error => {
@@ -210,9 +213,34 @@ export default {
       });
     },
     showPDF(id) {
-      this.getPDF(id).then(response => {
-        let url = response.data.data.courseFileInfo[0].fileUrl;
-        PDF.PDFObject.embed(url, "#psd-content");
+      this.getPDF(id)
+        .then(response => {
+          let url = response.data.data.courseFileInfo[0].fileUrl;
+          return new Promise((resolve, reject) => {
+            getPDFFile(url)
+              .then(response => {
+                resolve(response);
+              })
+              .catch(error => {
+                reject(error);
+              });
+          });
+        })
+        .then(response => {
+          this.saveFile(response);
+          // PDF.PDFObject.embed(response, "#psd-content");
+        });
+    },
+    //将文件保存到本地
+    saveFile(data) {
+      console.log(data.data);
+      let fs = require("fs");
+      fs.writeFile("../../static/pdf/temp.pdf", blob, {}, (err, res) => {
+        if (err) {
+          console.error(err);
+          return;
+        }
+        console.log("video saved");
       });
     },
     getPDF(index) {
@@ -227,10 +255,10 @@ export default {
       });
     },
     goToExam(id) {
-      Cookies.set('isComplete','OK')
+      Cookies.set("isComplete", "OK");
       this.$router.push({
         path: "examination",
-        query: { num: id, passScore: this.passScore }
+        query: { num: id, remainingTimes: this.remainingTimes }
       });
     }
   }

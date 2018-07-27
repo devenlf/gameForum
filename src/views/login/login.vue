@@ -2,7 +2,7 @@
 <div id="content">
     <v-header></v-header>
     <div class="division"></div>
-    <div class="card-box">
+    <div class="card-box" v-loading="loginloading" element-loading-text="正在登陆中">
       <div class="login-from">
         <form>
            <div class="row-line ">
@@ -72,6 +72,7 @@ export default {
       },
       canSubmit: false,
       currentPage: 0,
+      loginloading:false,
       guideBook: [
         { img: "/static/img/1.png" },
         { img: "/static/img/2.png" },

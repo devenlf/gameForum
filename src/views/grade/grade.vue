@@ -9,7 +9,7 @@
                 <h5>您已完成答题!</h5>
                 <p class="score">您的得分为:<span>{{scoreData.score}}</span></p>
                 <p class="result">您的考试结果为:<span v-if="scoreData.score > scoreData.passScore">合格</span><span v-else>不合格</span></p>
-                <p class="exam-num">您还剩余:(<span>{{scoreData.consumeTime}}</span> )次考试机会</p>
+                <p class="exam-num">您还剩余:(<span>{{scoreData.remainingTimes}}</span> )次考试机会</p>
                 <template v-if="scoreData.score > scoreData.passScore">
                             <img src="@/assets/image/small_01.png"/>
                 </template>
