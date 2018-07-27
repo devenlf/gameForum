@@ -38,9 +38,6 @@ export function submitExamPaper(submitData) {
 export function userStudy(id) {
     return service({
         url: "/mobile/course/status/" + id + "",
-        method: 'GET',
-        params: {
-            'courseId': id
-        }
+        method: 'GET'
     })
 }

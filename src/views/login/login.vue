@@ -62,7 +62,8 @@
 <script>
 import "./login.scss";
 import header from "@/components/header/header";
-import { getCookie , removeCookie} from '../../utils/cookieFunction';
+import { getCookie, removeCookie } from "../../utils/cookieFunction";
+import { Message } from "element-ui";
 export default {
   data() {
     return {
@@ -73,7 +74,7 @@ export default {
       },
       canSubmit: false,
       currentPage: 0,
-      loginloading:false,
+      loginloading: false,
       guideBook: [
         { img: "/static/img/1.png" },
         { img: "/static/img/2.png" },
@@ -120,16 +121,22 @@ export default {
     loginUser() {
       var $this = this;
       this.loginloading = true;
-      if(getCookie()){
-        removeCookie()
-      } 
+      if (getCookie()) {
+        removeCookie();
+      }
       this.$store
         .dispatch("Login", {
           account: this.loginInfo.account,
           password: this.loginInfo.password
         })
         .then(response => {
-          console.log(response);
+          if (!response.data.data.user.publictech) {
+            Message.error({
+              message: "您不是刊授会员，无法登陆！"
+            });
+            $this.loginloading = false;
+            return
+          }
           if (response.data.success) {
             $this.loginloading = false;
             $this.$router.push({ path: "/" });

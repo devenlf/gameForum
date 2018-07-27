@@ -84,7 +84,7 @@
 var PDF = require("@/assets/js/pdfobject.js");
 import { examInfo } from "@/api/exam";
 import { examList } from "@/api/exam";
-import { coursePDF, getPDFFile } from "@/api/course";
+import { coursePDF } from "@/api/course";
 import { userStudy } from "@/api/exam";
 import { getCookie } from "../../utils/cookieFunction";
 import { Loading, Message } from "element-ui";
@@ -215,16 +215,8 @@ export default {
     showPDF(id) {
       this.getPDF(id)
         .then(response => {
-          let url = response.data.data.courseFileInfo[0].fileUrl;
-          return new Promise((resolve, reject) => {
-            getPDFFile(url)
-              .then(response => {
-                resolve(response);
-              })
-              .catch(error => {
-                reject(error);
-              });
-          });
+          let url = 'http://117.50.14.118:8000/nurseLearning-mobile/operation/readFile'+response.data.data.courseFileInfo[0].fileUrl;
+          PDF.PDFObject.embed(url, "#psd-content");
         })
         .then(response => {
           PDF.PDFObject.embed(response, "#psd-content");
