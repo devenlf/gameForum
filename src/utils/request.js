@@ -9,8 +9,8 @@ import { Message } from 'element-ui'
 
 // 创建axios实例
 const service = axios.create({
-  // baseURL: 'http://117.50.14.118:8000/nurseLearning-mobile/',
-  baseURL: 'http://192.168.13.252:8080/nurseLearning-mobile/',
+  baseURL: 'http://117.50.14.118:8000/nurseLearning-mobile/',
+  // baseURL: 'http://192.168.13.252:8080/nurseLearning-mobile/',
   timeout: 50000 // 请求超时时间
 })
 

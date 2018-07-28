@@ -30,6 +30,9 @@ export default {
 </script>
 
 <style lang="scss">
+#suresubmit{
+  background: white;
+}
 .suresubmit-body {
   padding: 10px 20px;
   font-size: 16px;
