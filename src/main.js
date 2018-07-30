@@ -11,7 +11,6 @@ import '@/style/font-awesome-4.7.0/css/font-awesome.css'
 
 Vue.config.productionTip = false
 Vue.prototype.$http = axios;
-
 Vue.use(ElementUI);
 
 /* eslint-disable no-new */

@@ -14,7 +14,9 @@
         </form>
         <div class="row-line">
              <i></i><input type="text" name="verification" id="verification" class="form-control validate" value="验证码">
-             <img class="code" src="../../../static/img/timg.jpg" />
+                 <div class="code" @click="makeCode">
+                      <s-identify :identifyCode="identifyCode"></s-identify>
+                 </div>
         </div>
         <div class="row-line">
           <i></i><button class="btn plugin-sub login-btn waves-effect waves-light" @click="loginUser" type="submit">登录</button>
@@ -64,9 +66,11 @@ import "./login.scss";
 import header from "@/components/header/header";
 import { getCookie, removeCookie } from "../../utils/cookieFunction";
 import { Message } from "element-ui";
+import SIdentify from '@/components/identify/identify'
 export default {
   data() {
     return {
+      identifyCode: "",
       cueMessage: "",
       loginInfo: {
         account: "201811111112",
@@ -85,6 +89,9 @@ export default {
         { img: "/static/img/7.png" }
       ]
     };
+  },
+  mounted:function(){
+    this.makeCode()
   },
   created: function() {},
   watch: {
@@ -118,6 +125,9 @@ export default {
         this.$set(this.$data, "currentPage", this.currentPage);
       }
     },
+    makeCode(o, l) {
+      this.identifyCode = '12a4'
+    },
     loginUser() {
       var $this = this;
       this.loginloading = true;
@@ -135,7 +145,7 @@ export default {
               message: "您不是刊授会员，无法登陆！"
             });
             $this.loginloading = false;
-            return
+            return;
           }
           if (response.data.success) {
             $this.loginloading = false;
@@ -150,7 +160,8 @@ export default {
     }
   },
   components: {
-    "v-header": header
+    "v-header": header,
+    's-identify' : SIdentify
   }
 };
 </script>
@@ -170,9 +181,11 @@ export default {
   float: left;
 }
 .code {
-  width: 140px;
-  margin-top: 5px;
-  margin-left: 35px;
+  margin: 20px 0 0 240px;
+  width: 114px;
+  height: 40px;
+  border: 1px solid red;
+  position: relative;
 }
 </style>
 

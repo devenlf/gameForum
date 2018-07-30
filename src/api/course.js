@@ -7,11 +7,5 @@ export function coursePDF(id) {
     })
 }
 
-export function getPDFFile(url){
-    return service({
-        url: 'mobile/course/operation/readFile'+url,
-        method: 'GET'
-    })
-}
 
  

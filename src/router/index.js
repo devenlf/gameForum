@@ -5,6 +5,7 @@ import home from '../views/home/home';
 import project from '../views/project-list/project-list';
 import grade from '../views/grade/grade';
 import examination from '../views/examination/examination';
+import codetest from '../views/codetest/codetest';
 
 
 Vue.use(VueRouter);
@@ -15,7 +16,7 @@ const router = new VueRouter({
             //重定向
             redirect: '/project',
             component: home,
-            name:home,
+            name: home,
             children: [
                 {
                     path: 'project',
@@ -31,11 +32,15 @@ const router = new VueRouter({
         },
         {
             path: '/login',
-            component: login,
+            component: login
         },
         {
             path: '/examination',
-            component: examination,
+            component: examination
+        },
+        {
+            path: '/codetest',
+            component: codetest
         }
     ]
 });
