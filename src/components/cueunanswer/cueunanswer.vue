@@ -30,6 +30,9 @@ export default {
 </script>
 
 <style lang="scss">
+#cueunanswer{
+  background: white;
+}
 .cueunanswer-body {
   font-size: 16px;
   padding: 0px 16px;
