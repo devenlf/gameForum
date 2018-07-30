@@ -13,7 +13,7 @@
            </div>
         </form>
         <div class="row-line">
-             <i></i><input type="text" name="verification" id="verification" class="form-control validate" value="验证码">
+             <i></i><input type="text" v-model="inputCode" name="verification" id="verification" class="form-control validate" value="验证码">
                  <div class="code" @click="makeCode">
                       <s-identify :identifyCode="identifyCode"></s-identify>
                  </div>
@@ -66,11 +66,14 @@ import "./login.scss";
 import header from "@/components/header/header";
 import { getCookie, removeCookie } from "../../utils/cookieFunction";
 import { Message } from "element-ui";
-import SIdentify from '@/components/identify/identify'
+import { getCode } from "@/api/user";
+import axios from "axios";
+import SIdentify from "@/components/identify/identify";
 export default {
   data() {
     return {
       identifyCode: "",
+      inputCode:"",
       cueMessage: "",
       loginInfo: {
         account: "201811111112",
@@ -90,10 +93,10 @@ export default {
       ]
     };
   },
-  mounted:function(){
-    this.makeCode()
-  },
   created: function() {},
+  mounted: function() {
+    this.makeCode();
+  },
   watch: {
     loginInfo: {
       handler(value, oldValue) {
@@ -125,10 +128,24 @@ export default {
         this.$set(this.$data, "currentPage", this.currentPage);
       }
     },
-    makeCode(o, l) {
-      this.identifyCode = '12a4'
+    makeCode() {
+      return new Promise((resolve, reject) => {
+        let _this = this;
+        axios
+          .get("http://localhost:3000/code")
+          .then(function(response) {
+            _this.identifyCode = response.data;
+          })
+          .catch(function(error) {
+            console.log(error);
+          });
+      });
     },
     loginUser() {
+      if(this.inputCode.toLowerCase()!== this.identifyCode.toLowerCase()){
+        Message.error('验证码输入错误')
+        return
+      }
       var $this = this;
       this.loginloading = true;
       if (getCookie()) {
@@ -161,7 +178,7 @@ export default {
   },
   components: {
     "v-header": header,
-    's-identify' : SIdentify
+    "s-identify": SIdentify
   }
 };
 </script>
@@ -181,7 +198,7 @@ export default {
   float: left;
 }
 .code {
-  margin: 20px 0 0 240px;
+  margin: 5% 0 0 65%;
   width: 114px;
   height: 40px;
   border: 1px solid red;
