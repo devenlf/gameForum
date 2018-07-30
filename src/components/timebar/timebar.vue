@@ -1,7 +1,7 @@
 <template>
    <div id="timebar" class="v-time">
    <div class="user-info">
-         <span class="time1">傍晚好,</span>
+         <span class="time1">{{timeSec}}好</span>
          <span class="name">{{name}}</span>
          <a class="sign-out" @click="signOut">[退出]</a>
          <span class="time2">
@@ -12,9 +12,9 @@
 </template>
 
 <script>
-import { getCookie, setCookie, removeCookie } from '../../utils/cookieFunction';
-import store from '@/store'
-import $ from 'jquery'
+import { getCookie, setCookie, removeCookie } from "../../utils/cookieFunction";
+import store from "@/store";
+import $ from "jquery";
 const weekday = [
   "星期天",
   "星期一",
@@ -24,10 +24,12 @@ const weekday = [
   "星期五",
   "星期六"
 ];
+const timeSection = ["上午", "下午", "晚上", "凌晨"];
 export default {
   data() {
     return {
-      name: '',
+      name: "",
+      timeSec: this.getTimeSection(),
       timeData: this.timeFormat()
     };
   },
@@ -35,7 +37,7 @@ export default {
     this.updataTime();
   },
   created: function() {
-    this.name = $.parseJSON( getCookie() ).data.name;
+    this.name = $.parseJSON(getCookie()).data.name;
   },
 
   methods: {
@@ -43,6 +45,7 @@ export default {
       var _this = this;
       setInterval(function() {
         var newTime = _this.timeFormat();
+        _this.getTimeSection();
         _this.$set(_this.$data, "timeData", newTime);
       }, 1000);
     },
@@ -67,8 +70,22 @@ export default {
         time.getSeconds();
       return newTime;
     },
+    getTimeSection() {
+      let time = new Date().getHours();
+      if (0 <= time && time < 6) {
+        this.timeSec = timeSection[3];
+      } else if (6 <= time && time < 12) {
+        this.timeSec = timeSection[0];
+      } else if (12 <= time && time < 18) {
+        this.timeSec = timeSection[1];
+      } else if (18 <= time && time < 24) {
+        this.timeSec = timeSection[2];
+      } else {
+        console.log("错误时间");
+      }
+    },
     signOut() {
-      store.dispatch("LogOut")
+      store.dispatch("LogOut");
       this.$router.push({ path: "/login" });
     }
   }

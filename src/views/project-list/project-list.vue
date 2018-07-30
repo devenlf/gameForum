@@ -109,6 +109,9 @@ export default {
     };
   },
   created: function() {
+    if($('.modal-backdrop')){
+      $('.modal-backdrop').hide();
+    }
     this.showListExam();
   },
   methods: {

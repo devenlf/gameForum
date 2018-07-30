@@ -1,5 +1,5 @@
 import router from '../router';
-import { getCookie } from '../utils/cookieFunction'
+import { getCookie,removeCookie } from '../utils/cookieFunction'
 import store from '@/store'
 
 router.beforeEach((to, from, next) => {
@@ -15,6 +15,7 @@ router.beforeEach((to, from, next) => {
                     next('/project')
                 }
             }else{
+                removeCookie('isComplete')
                 next();
             }
         } else {
